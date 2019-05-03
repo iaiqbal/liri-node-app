@@ -7,33 +7,27 @@ const fs = require("fs");
 // const spotifyKeys = new Spotify(keys.spotify);
 
 // const spotify = require("node-spotify-api");
-
-const request = require("request");
-
+// const ticketmaster = require("ticketmaster");
 // const omdb = require("omdb");
 const axios = require("axios");
-const command = process.argv[2];
+const request = process.argv[2];
 const input = process.argv[3];
 const omdbQuery = "http://www.omdbapi.com/?t=" + input + "&y=&plot=short&apikey=" + process.env.OMDB_ID;
+const ticketQuery = "https://app.ticketmaster.com/discovery/v2/events.json?keyword=" + input + "&city=houston&size=1&apikey=" + process.env.TICKETMASTER_ID;
 
 
-const inquirer = require("inquirer");
-
-// const ticketmaster = require("ticketmaster");
-
-console.log(omdbQuery);
 
 
 
 
 function switchCase() {
-    switch(command) {
+    switch(request) {
         case "search-movies":
             omdbRun(par);
             break;
 
         case "search-concerts":
-            concertsRun(par);
+            concertsRun(par1);
             break;
         
         case "search-songs":
@@ -63,7 +57,22 @@ axios.get(omdbQuery)
         console.log(response.data.Language);
         console.log(response.data.Plot);
         console.log(response.data.Actors);
+        console.log(response.data.Ratings);
         // return response.Actors;
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+
+axios.get(ticketQuery)
+    .then(function (response) {
+
+        function concertsRun(par1) {
+            let choiceConcert = par1;
+        };
+
+        console.log(response.data._embedded);
+
     })
     .catch(function (error) {
         console.log(error);
