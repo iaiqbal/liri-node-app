@@ -23,31 +23,61 @@ const ticketQuery = "https://app.ticketmaster.com/discovery/v2/events.json?keywo
 function switchCase() {
     switch(request) {
         case "search-movies":
-            omdbRun(par);
+            omdbRun(item);
             break;
 
         case "search-concerts":
-            concertsRun(par1);
+            concertsRun(item1);
             break;
         
         case "search-songs":
-            songsRun(par);
+            songsRun(item2);
             break;
         
         case "feeling-lucky":
-            luckyRun(par);
+            luckyRun(item3);
             break;
     }
+};
+
+function spotifySong(item2) {
+
+
+    let track;
+    if (item2 === undefined) {
+        searchTrack = "Separate Ways";
+    } else {
+        searchTrack = item2;
+    }
+
+    spotify.search({
+        type: 'track',
+        query: track
+    }, function (error, data) {
+        if (errorDisplay) {
+            display('The error is the following: ' + errorDisplay);
+            return;
+        } else {
+            
+            console.log("Artist name is: " + data.tracks.items[0].artists[0].name);
+            console.log("Song name is: " + data.tracks.items[0].name);
+            console.log("Preview: " + data.tracks.items[3].preview_url);
+            console.log("Album name is: " + data.tracks.items[0].album.name);
+            
+
+        }
+
+    });
 };
 
 axios.get(omdbQuery)
     .then(function (response) {
 
-        function omdbRun(par) {
+        function omdbRun(item) {
             let choiceMovie = par;
-            if (par === undefined) {
+            if (item === undefined) {
                 choiceMovie = "Mr. Nobody";
-            } else choiceMovie = par;
+            } else choiceMovie = item;
             
         };
         console.log(response.data.Title);
@@ -64,11 +94,12 @@ axios.get(omdbQuery)
         console.log(error);
     });
 
+if ("search-concerts") {
 axios.get(ticketQuery)
     .then(function (response) {
 
-        function concertsRun(par1) {
-            let choiceConcert = par1;
+        function concertsRun(item1) {
+            let choiceConcert = item1;
         };
 
         console.log(response.data._embedded);
@@ -77,3 +108,4 @@ axios.get(ticketQuery)
     .catch(function (error) {
         console.log(error);
     });
+};
